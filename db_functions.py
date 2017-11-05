@@ -48,10 +48,10 @@ def delete_table():
 
 
 def create_record(Title, Author, ISIN, Genre, Rating=None):
+    if Rating is None:
+        Rating = "NULL"
     params = locals()
     params.update({'TBL_NAME': TBL_NAME})
-    if Rating is None:
-        Rating = 'NULL'
     conn = get_connection()
     if conn is not None:
         if not conn.engine.has_table(TBL_NAME):

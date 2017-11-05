@@ -29,7 +29,6 @@ def parse_command_line():
 
 def add_record():
     Title, Author, ISIN, Genre, Rating = parse_command_line()
-    print(Title, Author, ISIN, Genre, Rating)
     create_record(Title, Author, ISIN, Genre, Rating)
 
 
