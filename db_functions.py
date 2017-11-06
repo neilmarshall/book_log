@@ -8,8 +8,8 @@ Created on Thu Nov  2 21:31:36 2017
 
 import sqlalchemy
 
-from parameters import DB_FILENAME, TBL_NAME, CREATE_TABLE_SQL, \
-                       DELETE_TABLE_SQL
+from book_log.parameters import DB_FILENAME, TBL_NAME, CREATE_TABLE_SQL, \
+                                DELETE_TABLE_SQL
 
 
 def get_connection():
@@ -17,6 +17,7 @@ def get_connection():
         engine = sqlalchemy.create_engine(DB_FILENAME)
         conn = engine.connect()
     except sqlalchemy.exc.SQLAlchemyError:
+        print('*' * 50, 'ERROR: COULD NOT OPEN DATABASE', '*' * 50, sep='\n')
         raise
     return conn
 

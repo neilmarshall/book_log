@@ -6,7 +6,9 @@ Created on Thu Nov  2 21:31:36 2017
 @author: neilmarshall
 """
 
-from add_record import add_record
+import sys
 
-if __name__ == "__main___":
-    add_record()
+from book_log.add_record import add_record
+
+if __name__ == "__main__":
+    add_record(sys.argv[1:])

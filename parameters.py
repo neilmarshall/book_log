@@ -6,7 +6,8 @@ Created on Thu Nov  2 21:31:36 2017
 @author: neilmarshall
 """
 
-DB_FILENAME = "sqlite:///data/book_log.db"
+DB_FILENAME = "sqlite:///book_log/data/book_log.db"
+
 TBL_NAME = "Books"
 
 CREATE_TABLE_SQL = """CREATE TABLE IF NOT EXISTS {TBL_NAME:s} (Title TEXT
