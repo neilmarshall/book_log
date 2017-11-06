@@ -43,8 +43,7 @@ class Test_parse_command_line(unittest.TestCase):
     @unittest.expectedFailure
     def test_invalid_list_with_invalid_ISIN(self):
         self.test_list[2] = 'an invalid ISIN'
-        self.assertRaisesRegex(ValueError,
-                               'ISIN not in correct format',
+        self.assertRaisesRegex(ValueError, 'ISIN not in correct format',
                                parse_command_line, self.test_list)
 
 

@@ -49,18 +49,17 @@ def delete_table():
 
 
 def create_record(Title, Author, ISIN, Genre, Rating=None):
+    conn = get_connection()
     if Rating is None:
         Rating = "NULL"
-    params = locals()
-    params.update({'TBL_NAME': TBL_NAME})
-    conn = get_connection()
     if conn is not None:
         if not conn.engine.has_table(TBL_NAME):
             create_table()
         try:
             conn.execute('''INSERT INTO {TBL_NAME} (Title, Author, ISIN,
                          Genre, Rating) VALUES ("{Title}", "{Author}",
-                         "{ISIN}", "{Genre}", {Rating});'''.format(**params))
+                         "{ISIN}", "{Genre}", {Rating});
+                         '''.format(TBL_NAME=TBL_NAME, **locals()))
         except sqlalchemy.exc.StatementError:
             raise
         finally:
