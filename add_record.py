@@ -23,11 +23,19 @@ def parse_command_line(*args):
     parser.add_argument('Genre')
     parser.add_argument('Rating', type=int, nargs='?')
     args = parser.parse_args(*args)
+    if args.Rating is not None:
+        if args.Rating not in [1, 2, 3, 4, 5]:
+            raise ValueError('Rating must be between 1 and 5, if supplied')
+    if not validate_ISIN(args.ISIN):
+        raise ValueError('ISIN not in correct format')
     # -------------------------------------------------------------------------
-    # check that rating, if present, lies within range [1, 5]
     # check that ISIN is in appropriate form (use regexes)
     # -------------------------------------------------------------------------
     return args.Title, args.Author, args.ISIN, args.Genre, args.Rating
+
+
+def validate_ISIN(ISIN):
+    return True
 
 
 def add_record(*args):
