@@ -58,7 +58,3 @@ class Test_validate_ISIN(unittest.TestCase):
     def test_validate_ISIN_returns_False_for_invalid_ISIN(self):
         invalid_ISIN = ''
         self.assertFalse(validate_ISIN(invalid_ISIN))
-
-
-if __name__ == '__main__':
-    unittest.main()
