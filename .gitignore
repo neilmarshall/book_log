@@ -1,1 +1,2 @@
-data/book_log.db
+data/
+__pycahce__/
