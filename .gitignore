@@ -1,1 +1,2 @@
-data/book_log.db
+data/
+__pycache__/
