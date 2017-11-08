@@ -45,14 +45,14 @@ def delete_table(db_name, tbl_name):
         conn.close()
 
 
-def create_record(Title, Author, ISIN, Genre, Rating=None):
+def create_record(Title, Author, ISBN, Genre, Rating=None):
     conn = get_connection(DB_FILENAME)
     if Rating is None:
         Rating = "NULL"
     if not conn.engine.has_table(TBL_NAME):
         create_table(DB_FILENAME)
-    INSERT_RECORD_SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISIN, Genre,
-        Rating) VALUES ("{Title}", "{Author}", "{ISIN}", "{Genre}", {Rating});
+    INSERT_RECORD_SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
+        Rating) VALUES ("{Title}", "{Author}", "{ISBN}", "{Genre}", {Rating});
         '''.format(TBL_NAME=TBL_NAME, **locals())
 
     try:
