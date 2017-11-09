@@ -1,9 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Mon Nov  6 22:40:16 2017
-
-@author: neilmarshall
+Test module for add_record.py
 """
 
 import unittest
@@ -15,17 +11,17 @@ class Test_parse_command_line(unittest.TestCase):
 
     def setUp(self):
         self.test_list = ['test title', 'test author',
-                          'test ISBN', 'test genre']
+                          '0-201-53082-1', 'test genre']
 
     def test_valid_list_with_no_rating_parsed_correctly(self):
         self.assertTupleEqual(parse_command_line(self.test_list),
-                              ('test title', 'test author', 'test ISBN',
+                              ('test title', 'test author', '0-201-53082-1',
                                'test genre', None))
 
     def test_valid_list_with_rating_parsed_correctly(self):
         self.test_list.append('4')
         self.assertTupleEqual(parse_command_line(self.test_list),
-                              ('test title', 'test author', 'test ISBN',
+                              ('test title', 'test author', '0-201-53082-1',
                                'test genre', 4))
 
     def test_invalid_list_with_rating_less_than_1(self):
@@ -40,7 +36,6 @@ class Test_parse_command_line(unittest.TestCase):
                                'Rating must be between 1 and 5, if supplied',
                                parse_command_line, self.test_list)
 
-    @unittest.expectedFailure
     def test_invalid_list_with_invalid_ISBN(self):
         self.test_list[2] = 'an invalid ISBN'
         self.assertRaisesRegex(ValueError, 'ISBN not in correct format',
@@ -55,7 +50,7 @@ class Test_validate_ISBN(unittest.TestCase):
 
     def test_10_digit_invalid_ISBN_returns_False(self):
         base_ISBN = '0-201-53082-'
-        for d in '0123456789':
+        for d in '023456789':
             with self.subTest(d=d):
                 self.assertFalse(validate_ISBN(base_ISBN + d))
 
@@ -65,6 +60,10 @@ class Test_validate_ISBN(unittest.TestCase):
 
     def test_13_digit_invalid_ISBN_returns_False(self):
         base_ISBN = '978-0-306-40615-'
-        for d in '0123456789':
+        for d in '012345689':
             with self.subTest(d=d):
                 self.assertFalse(validate_ISBN(base_ISBN + d))
+
+
+if __name__ == '__main__':
+    unittest.main()
