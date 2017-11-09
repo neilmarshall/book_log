@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Module defines database functions to 
+
 Created on Thu Nov  2 21:31:36 2017
 
 @author: neilmarshall
@@ -12,6 +14,9 @@ from book_log.parameters import DB_FILENAME, TBL_NAME, CREATE_TABLE_SQL
 
 
 def get_connection(db_name):
+    
+    """Returns an open database connection"""
+    
     try:
         engine = sqlalchemy.create_engine(db_name)
         conn = engine.connect()
@@ -21,7 +26,11 @@ def get_connection(db_name):
 
 
 def create_table(db_name):
+
+    """Executes SQL statement to add a table to a database object"""
+
     conn = get_connection(db_name)
+    
     try:
         conn.execute(CREATE_TABLE_SQL)
     except sqlalchemy.exc.StatementError:
@@ -31,11 +40,17 @@ def create_table(db_name):
 
 
 def delete_table(db_name, tbl_name):
+    
+    """Executes SQL statement to delte a table from a database object"""
+    
     conn = get_connection(db_name)
+    
     DELETE_TABLE_SQL = 'DROP TABLE IF EXISTS {tbl_name};'.format(**locals())
+    
     if not conn.engine.has_table(tbl_name):
         raise sqlalchemy.exc.NoSuchTableError(
                 '{tbl_name} not found'.format(**locals()))
+    
     try:
         conn.execute()
     except sqlalchemy.exc.StatementError:
@@ -46,11 +61,17 @@ def delete_table(db_name, tbl_name):
 
 
 def create_record(Title, Author, ISBN, Genre, Rating=None):
+    
+    """Executes SQL statement to add a row into a table of a database object"""
+    
     conn = get_connection(DB_FILENAME)
+    
     if Rating is None:
         Rating = "NULL"
+    
     if not conn.engine.has_table(TBL_NAME):
         create_table(DB_FILENAME)
+    
     INSERT_RECORD_SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
         Rating) VALUES ("{Title}", "{Author}", "{ISBN}", "{Genre}", {Rating});
         '''.format(TBL_NAME=TBL_NAME, **locals())

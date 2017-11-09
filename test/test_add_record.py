@@ -53,11 +53,18 @@ class Test_validate_ISBN(unittest.TestCase):
         valid_ISBN = '0-201-53082-1'
         self.assertTrue(validate_ISBN(valid_ISBN))
 
+    def test_10_digit_invalid_ISBN_returns_False(self):
+        base_ISBN = '0-201-53082-'
+        for d in '0123456789':
+            with self.subTest(d=d):
+                self.assertFalse(validate_ISBN(base_ISBN + d))
+
     def test_13_digit_valid_ISBN_returns_True(self):
         valid_ISBN = '978-0-306-40615-7'
         self.assertTrue(validate_ISBN(valid_ISBN))
 
-    @unittest.skip("Full range of negative scenarios not yet considered")
-    def test_validate_ISBN_returns_False_for_invalid_ISBN(self):
-        invalid_ISBN = ''
-        self.assertFalse(validate_ISBN(invalid_ISBN))
+    def test_13_digit_invalid_ISBN_returns_False(self):
+        base_ISBN = '978-0-306-40615-'
+        for d in '0123456789':
+            with self.subTest(d=d):
+                self.assertFalse(validate_ISBN(base_ISBN + d))

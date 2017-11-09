@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Module defines functions to read in and validate command line arguments, 
+and create a database record from those arguments.
+
 Created on Thu Nov  2 21:31:36 2017
 
 @author: neilmarshall
@@ -15,7 +18,13 @@ __version__ = '1.1.1'
 
 
 def parse_command_line(*args):
+    
+    """
+    Parse command line arguments.
+    """
+    
     parser = argparse.ArgumentParser()
+    
     parser.add_argument('-V', '--version', action='version',
                         version=__version__)
     parser.add_argument('Title')
@@ -23,18 +32,23 @@ def parse_command_line(*args):
     parser.add_argument('ISBN')
     parser.add_argument('Genre')
     parser.add_argument('Rating', type=int, nargs='?')
+    
     args = parser.parse_args(*args)
+    
     if args.Rating is not None:
         if args.Rating not in [1, 2, 3, 4, 5]:
             raise ValueError('Rating must be between 1 and 5, if supplied')
+    
     if not validate_ISBN(args.ISBN):
         raise ValueError('ISBN not in correct format')
+    
     return args.Title, args.Author, args.ISBN, args.Genre, args.Rating
 
 
 def validate_ISBN(ISBN):
+    
     """
-    Function to validate if a given ISBN is in correct format
+    Validate if a given ISBN is in correct format
     """
     
     ISBN_digits = ''.join([d for d in ISBN if d in '0123456789'])
@@ -62,5 +76,10 @@ def validate_ISBN(ISBN):
 
 
 def add_record(*args):
+    
+    """
+    Read in and validate command line arguments and create database record
+    """
     Title, Author, ISBN, Genre, Rating = parse_command_line(*args)
+
     create_record(Title, Author, ISBN, Genre, Rating)
