@@ -43,11 +43,10 @@ def validate_ISBN(ISBN):
     Validate if a given ISBN in correct format
     """
 
+    pat = r'((978|979)(-))?(\d)-(\d{3})-(\d{5})-(\d)'
+    is_valid_ISBN = re.match(pat, ISBN) is not None
+
     ISBN_digits = ''.join([d for d in ISBN if d in '0123456789'])
-
-    pat = r'(978|979)?([\d]{2})([\d]{4})([\d]{3})(\d)'
-
-    is_valid_ISBN = re.match(pat, ISBN_digits) is not None
 
     if len(ISBN_digits) == 10:
         weights = list(range(10, 0, -1))
