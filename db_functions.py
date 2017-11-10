@@ -42,12 +42,15 @@ def delete_table(conn, tbl_name):
         raise
 
 
-def insert_row(conn, tbl_name, Title, Author, ISBN, Genre, Rating):
+def insert_row(conn, tbl_name, Title, Author, ISBN, Genre, Rating, Date):
     """Execute SQL statement to add row into database object"""
 
     INSERT_RECORD_SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
-        Rating) VALUES ("{Title}", "{Author}", "{ISBN}", "{Genre}", {Rating});
-        '''.format(TBL_NAME=tbl_name, **locals())
+        Rating'''.format(TBL_NAME=tbl_name)
+    INSERT_RECORD_SQL += 'Date)' if Date else ')'
+    INSERT_RECORD_SQL += ''') VALUES ("{Title}", "{Author}", "{ISBN}",
+        "{Genre}", {Rating}'''.format(**locals())
+    INSERT_RECORD_SQL += '{Date});'.format(**locals()) if Date else ');'
 
     try:
         conn.execute(INSERT_RECORD_SQL)
@@ -55,7 +58,7 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre, Rating):
         raise
 
 
-def create_record(Title, Author, ISBN, Genre, Rating=None):
+def create_record(Title, Author, ISBN, Genre, Rating, Date):
     """Control function for SQL execution"""
 
     conn = get_connection(DB_FILENAME)
@@ -63,7 +66,10 @@ def create_record(Title, Author, ISBN, Genre, Rating=None):
     if conn.exeecute('PRAGMA table_info(?);', TBL_NAME).fetchall() == []:
         create_table(conn, TBL_NAME)
 
-    insert_row(conn, TBL_NAME, Title, Author, ISBN, Genre,
-               "NULL" if Rating is None else Rating)
+    insert_row_args = [conn, TBL_NAME, Title, Author, ISBN, Genre]
+    if Date:
+        insert_row_args .append()
+    insert_row_args .append("NULL" if Rating is None else Rating)
+    insert_row(*insert_row_args)
 
     conn.close()

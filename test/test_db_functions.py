@@ -71,6 +71,21 @@ class Test_insert_row(unittest.TestCase):
         self.test_list.extend([str(date.today()), None])
         self.assertTupleEqual(rows[0], tuple(self.test_list))
 
+    def test_insert_row_with_rating_but_no_date(self):
+        self.test_list[-1] = 4
+        insert_row(self.conn, 'books', *self.test_list)
+        rows = self.conn.execute('SELECT * FROM books;').fetchall()
+        self.test_list.insert(4, str(date.today()))
+        self.assertTupleEqual(rows[0], tuple(self.test_list))
+
+    @unittest.skip("'Date argument feature not yet implemented")
+    def test_insert_row_with_date_but_no_rating(self):
+        pass
+
+    @unittest.skip("'Date argument feature not yet implemented")
+    def test_insert_row_with_date_and_rating(self):
+        pass
+
 
 class Test_create_record(unittest.TestCase):
 

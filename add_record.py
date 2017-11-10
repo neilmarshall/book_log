@@ -25,6 +25,7 @@ def parse_command_line(*args):
     parser.add_argument('ISBN')
     parser.add_argument('Genre')
     parser.add_argument('Rating', type=int, nargs='?')
+    parser.add_argument('-D', '--Date', action='store_const', const=None)
 
     args = parser.parse_args(*args)
 
@@ -35,7 +36,8 @@ def parse_command_line(*args):
     if not validate_ISBN(args.ISBN):
         raise ValueError('ISBN not in correct format')
 
-    return args.Title, args.Author, args.ISBN, args.Genre, args.Rating
+    return args.Title, args.Author, args.ISBN, args.Genre, args.Rating, \
+        args.Date
 
 
 def validate_ISBN(ISBN):
@@ -69,6 +71,6 @@ def add_record(*args):
     Read in and validate command line arguments and create database record
     """
 
-    Title, Author, ISBN, Genre, Rating = parse_command_line(*args)
+    Title, Author, ISBN, Genre, Rating, Date = parse_command_line(*args)
 
-    create_record(Title, Author, ISBN, Genre, Rating)
+    create_record(Title, Author, ISBN, Genre, Rating, Date)

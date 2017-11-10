@@ -13,16 +13,16 @@ class Test_parse_command_line(unittest.TestCase):
         self.test_list = ['test title', 'test author',
                           '0-201-53082-1', 'test genre']
 
-    def test_valid_list_with_no_rating_parsed_correctly(self):
+    def test_valid_list_with_no_rating_and_date(self):
         self.assertTupleEqual(parse_command_line(self.test_list),
                               ('test title', 'test author', '0-201-53082-1',
-                               'test genre', None))
+                               'test genre', None, None))
 
-    def test_valid_list_with_rating_parsed_correctly(self):
+    def test_valid_list_with_rating_but_no_date(self):
         self.test_list.append('4')
         self.assertTupleEqual(parse_command_line(self.test_list),
                               ('test title', 'test author', '0-201-53082-1',
-                               'test genre', 4))
+                               'test genre', 4, None))
 
     def test_invalid_list_with_rating_less_than_1(self):
         self.test_list.append('0')
