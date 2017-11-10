@@ -3,8 +3,8 @@ Test module for db_functions.py
 """
 
 import unittest
-
 import sqlite3
+from datetime import date
 
 from book_log.db_functions import get_connection, create_table, delete_table, \
                                   insert_row, create_record
@@ -26,7 +26,7 @@ class Test_create_table(unittest.TestCase):
 
     def setUp(self):
         self.conn = get_connection(':memory:')
-        create_table(self.conn)
+        create_table(self.conn, 'books')
         self.table_info = self.conn.execute('PRAGMA table_info(books);')
 
     def tearDown(self):
@@ -42,7 +42,7 @@ class Test_delete_table(unittest.TestCase):
 
     def setUp(self):
         self.conn = get_connection(':memory:')
-        create_table(self.conn)
+        create_table(self.conn, 'books')
         delete_table(self.conn, 'books')
         self.table_info = self.conn.execute('PRAGMA table_info(books);')
 
@@ -57,17 +57,19 @@ class Test_insert_row(unittest.TestCase):
 
     def setUp(self):
         self.conn = get_connection(':memory:')
-        create_table(self.conn)
+        create_table(self.conn, 'books')
         self.test_list = ['test title', 'test author',
                           '0-201-53082-1', 'test genre', 'NULL']
-        insert_row(self.conn, *self.test_list)
-        self.rows = self.conn.execute('SELECT * FROM books;').fetchall()
 
     def tearDown(self):
         self.conn.close()
 
-    def test_insert_row(self):
-        self.assertTupleEqual(self.rows[0], tuple(self.test_list[:-1] + [None]))
+    def test_insert_row_with_no_date_and_no_rating(self):
+        insert_row(self.conn, 'books', *self.test_list)
+        rows = self.conn.execute('SELECT * FROM books;').fetchall()
+        self.test_list = self.test_list[:-1]
+        self.test_list.extend([str(date.today()), None])
+        self.assertTupleEqual(rows[0], tuple(self.test_list))
 
 
 class Test_create_record(unittest.TestCase):
