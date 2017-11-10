@@ -53,26 +53,14 @@ def validate_ISBN(ISBN):
         weights = list(range(10, 0, -1))
         checksum = sum(map(lambda x: x[0] * x[1],
                            zip(map(int, ISBN_digits), weights)))
+        if checksum % 11 != 0:
+            is_valid_ISBN = False
     elif len(ISBN_digits) == 13:
         weights = [1, 3] * 6
         checksum = sum(map(lambda x: x[0] * x[1],
-                           zip(map(int, ISBN_digits[:-1]), weights)))
-    else:
-        weights = None
-        checksum = None
-
-    if checksum is not None:
-        if len(ISBN_digits) == 10:
-            if checksum % 11 != 0:
-                is_valid_ISBN = False
-        elif len(ISBN_digits) == 13:
-            checksum = checksum % 10
-            if not (checksum == 0 or 10 - checksum == int(ISBN_digits[-1])):
-                is_valid_ISBN = False
-        else:
-            raise RuntimeError
-    else:
-        is_valid_ISBN = False
+                           zip(map(int, ISBN_digits[:-1]), weights))) % 10
+        if not (checksum == 0 or 10 - checksum == int(ISBN_digits[-1])):
+            is_valid_ISBN = False
 
     return is_valid_ISBN
 
