@@ -20,13 +20,13 @@ def get_connection(db_name):
 def create_table(conn, tbl_name):
     """Execute SQL statement to add table to database object"""
 
-    CREATE_TABLE_SQL = """CREATE TABLE IF NOT EXISTS {TBL_NAME} (Title TEXT
+    SQL = """CREATE TABLE IF NOT EXISTS {TBL_NAME} (Title TEXT
         NOT NULL, Author TEXT NOT NULL, ISBN TEXT PRIMARY KEY, Genre TEXT NOT
         NULL, Date_Added TEXT NOT NULL DEFAULT CURRENT_DATE, Rating
         INTEGER);""".format(TBL_NAME=tbl_name)
 
     try:
-        conn.execute(CREATE_TABLE_SQL)
+        conn.execute(SQL)
     except sqlite3.ProgrammingError:
         raise
 
@@ -34,10 +34,10 @@ def create_table(conn, tbl_name):
 def delete_table(conn, tbl_name):
     """Execute SQL statement to delete table from database object"""
 
-    DELETE_TABLE_SQL = 'DROP TABLE IF EXISTS {tbl_name};'.format(**locals())
+    SQL = 'DROP TABLE IF EXISTS {tbl_name};'.format(**locals())
 
     try:
-        conn.execute(DELETE_TABLE_SQL)
+        conn.execute(SQL)
     except sqlite3.ProgrammingError:
         raise
 
@@ -46,15 +46,15 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
                Rating='NULL', Date=None):
     """Execute SQL statement to add row into database object"""
 
-    INSERT_RECORD_SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
+    SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
         Rating'''.format(TBL_NAME=tbl_name)
-    INSERT_RECORD_SQL += ', Date_Added)' if Date else ')'
-    INSERT_RECORD_SQL += ''' VALUES ("{Title}", "{Author}", "{ISBN}",
+    SQL += ', Date_Added)' if Date else ')'
+    SQL += ''' VALUES ("{Title}", "{Author}", "{ISBN}",
         "{Genre}", {Rating}'''.format(**locals())
-    INSERT_RECORD_SQL += ', "{Date}");'.format(**locals()) if Date else ');'
+    SQL += ', "{Date}");'.format(**locals()) if Date else ');'
 
     try:
-        conn.execute(INSERT_RECORD_SQL)
+        conn.execute(SQL)
         conn.commit()
     except sqlite3.ProgrammingError:
         raise
@@ -66,6 +66,7 @@ def create_record(Title, Author, ISBN, Genre, Rating, Date,
 
     conn = get_connection(db_filename)
 
+    # check if table already exists; create it if not
     SQL_TBL_CHECK = 'PRAGMA table_info({tbl_name});'.format(**locals())
     if conn.execute(SQL_TBL_CHECK).fetchall() == []:
         create_table(conn, tbl_name)

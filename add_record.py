@@ -59,10 +59,10 @@ def parse_command_line(*args):
     args = parser.parse_args(*args)
 
     if args.Rating is not None:
-        ARG_RATING_ERROR_MSG = ''.join(['Rating must be between ',
-           '{MIN_RATING} and {MAX_RATING}'.format(**locals()), ', if present'])
+        ARG_RATING_ERROR_MSG = ('Rating must be between '
+                                '{MIN_RATING} and {MAX_RATING}, if present')
         if args.Rating not in range(MIN_RATING, MAX_RATING + 1):
-            raise ValueError(ARG_RATING_ERROR_MSG)
+            raise ValueError(ARG_RATING_ERROR_MSG.format(**locals()))
 
     if not validate_ISBN(args.ISBN):
         raise ValueError('ISBN not in correct format')
