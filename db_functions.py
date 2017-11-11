@@ -62,7 +62,37 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
 
 def create_record(Title, Author, ISBN, Genre, Rating, Date,
                   db_filename=DB_FILENAME, tbl_name=TBL_NAME):
-    """Control function for SQL execution"""
+    """
+    Control function for SQL execution
+
+    Parameters
+    -------
+    Title : str
+        Title of book
+
+    Author : str
+        Author of book
+
+    ISBN : str
+        ISBN of book; must be in valid ISBN format
+
+    Genre : str
+        Genre of book
+
+    Rating : int
+        Book rating; defaults to None, but if provided must lie
+        in range [1, 5]
+
+    Date : str
+        Date record added; defaults to None, but if provided must be in
+        'd-m-yyyy' format
+
+    db_filename : str
+        Database file to write to; defaults to module variable DB_FILENAME
+
+    tbl_name : str
+        Table to write to; defaults to module variable TBL_NAME
+    """
 
     conn = get_connection(db_filename)
 

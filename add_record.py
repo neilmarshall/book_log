@@ -100,6 +100,28 @@ def validate_ISBN(ISBN):
 def add_record(*args):
     """
     Read in and validate command line arguments and create database record
+
+    Parameters
+    -------
+    Title : str
+        Title of book
+
+    Author : str
+        Author of book
+
+    ISBN : str
+        ISBN of book; must be in valid ISBN format
+
+    Genre : str
+        Genre of book
+
+    Rating : str
+        String representation of rating; optional, but if provided must lie
+        in range [1, 5]
+
+    Date : str
+        Date record added; optional, but if provided must be in 'd-m-yyyy'
+        format
     """
 
     Title, Author, ISBN, Genre, Rating, Date = parse_command_line(*args)
