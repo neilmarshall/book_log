@@ -42,13 +42,13 @@ def parse_command_line(*args):
 
     parser.add_argument('-V', '--version', action='version',
                         version=__version__)
-    parser.add_argument('Title', help='Book title, string')
-    parser.add_argument('Author', help='Book author, string')
-    parser.add_argument('ISBN', help='''Book ISBN, string, must be in
+    parser.add_argument('Title', help='Book title :: string')
+    parser.add_argument('Author', help='Book author :: string')
+    parser.add_argument('ISBN', help='''Book ISBN :: string - must be in
                         recognised ISBN format''')
-    parser.add_argument('Genre', help='Book genre, string')
-    parser.add_argument('Rating', type=int, nargs='?', help='''Book rating; if
-                        provided must be between {MIN_RATING} and
+    parser.add_argument('Genre', help='Book genre :: string')
+    parser.add_argument('Rating', type=int, nargs='?', help='''Book rating ::
+                        int - if provided must be between {MIN_RATING} and
                         {MAX_RATING}, else defaults to None
                         '''.format(**locals()))
     parser.add_argument('-D', '--Date',
