@@ -48,10 +48,10 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
 
     INSERT_RECORD_SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
         Rating'''.format(TBL_NAME=tbl_name)
-    INSERT_RECORD_SQL += ', Date)' if Date else ')'
+    INSERT_RECORD_SQL += ', Date_Added)' if Date else ')'
     INSERT_RECORD_SQL += ''' VALUES ("{Title}", "{Author}", "{ISBN}",
         "{Genre}", {Rating}'''.format(**locals())
-    INSERT_RECORD_SQL += ', {Date});'.format(**locals()) if Date else ');'
+    INSERT_RECORD_SQL += ', "{Date}");'.format(**locals()) if Date else ');'
 
     try:
         conn.execute(INSERT_RECORD_SQL)
@@ -71,7 +71,7 @@ def create_record(Title, Author, ISBN, Genre, Rating, Date):
     if Rating:
         insert_row.append(Rating)
     if Date:
-        insert_row_args .append(Date)
+        insert_row_args.append(Date.strftime('%Y-%m-%d'))
 
     insert_row(*insert_row_args)
 

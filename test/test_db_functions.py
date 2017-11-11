@@ -2,6 +2,7 @@
 Test module for db_functions.py
 """
 
+import datetime
 import unittest
 import sqlite3
 from datetime import date
@@ -78,13 +79,22 @@ class Test_insert_row(unittest.TestCase):
         self.test_list.insert(4, str(date.today()))
         self.assertTupleEqual(rows[0], tuple(self.test_list))
 
-    @unittest.skip("'Date argument feature not yet implemented")
     def test_insert_row_with_date_but_no_rating(self):
-        pass
+        self.test_list.append(datetime.datetime(2005, 12, 10))
+        insert_row(self.conn, 'books', *self.test_list)
+        rows = self.conn.execute('SELECT * FROM books;').fetchall()
+        self.test_list[-2] = '2005-12-10 00:00:00'
+        self.test_list[-1] = None
+        self.assertTupleEqual(rows[0], tuple(self.test_list))
 
-    @unittest.skip("'Date argument feature not yet implemented")
     def test_insert_row_with_date_and_rating(self):
-        pass
+        self.test_list[-1] = 4
+        self.test_list.append(datetime.datetime(2005, 12, 10))
+        insert_row(self.conn, 'books', *self.test_list)
+        rows = self.conn.execute('SELECT * FROM books;').fetchall()
+        self.test_list[-2] = '2005-12-10 00:00:00'
+        self.test_list[-1] = 4
+        self.assertTupleEqual(rows[0], tuple(self.test_list))
 
 
 class Test_create_record(unittest.TestCase):
