@@ -4,7 +4,7 @@ Module implements database create / read / write functionality
 
 import sqlite3
 
-DB_FILENAME = "sqlite:///book_log/data/book_log.db"
+DB_FILENAME = "book_log/data/book_log.db"
 TBL_NAME = "Books"
 
 
@@ -55,21 +55,24 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
 
     try:
         conn.execute(INSERT_RECORD_SQL)
+        conn.commit()
     except sqlite3.ProgrammingError:
         raise
 
 
-def create_record(Title, Author, ISBN, Genre, Rating, Date):
+def create_record(Title, Author, ISBN, Genre, Rating, Date,
+                  db_filename=DB_FILENAME, tbl_name=TBL_NAME):
     """Control function for SQL execution"""
 
-    conn = get_connection(DB_FILENAME)
+    conn = get_connection(db_filename)
 
-    if conn.execute('PRAGMA table_info(?);', TBL_NAME).fetchall() == []:
-        create_table(conn, TBL_NAME)
+    SQL_TBL_CHECK = 'PRAGMA table_info({tbl_name});'.format(**locals())
+    if conn.execute(SQL_TBL_CHECK).fetchall() == []:
+        create_table(conn, tbl_name)
 
-    insert_row_args = [conn, TBL_NAME, Title, Author, ISBN, Genre]
+    insert_row_args = [conn, tbl_name, Title, Author, ISBN, Genre]
     if Rating:
-        insert_row.append(Rating)
+        insert_row_args.append(Rating)
     if Date:
         insert_row_args.append(Date.strftime('%Y-%m-%d'))
 
