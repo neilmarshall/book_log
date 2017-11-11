@@ -52,13 +52,13 @@ class Test_parse_command_line(unittest.TestCase):
     def test_invalid_list_with_rating_less_than_1(self):
         self.test_list.append('0')
         self.assertRaisesRegex(ValueError,
-                               'Rating must be between 1 and 5, if supplied',
+                               'Rating must be between 1 and 5, if present',
                                parse_command_line, self.test_list)
 
     def test_invalid_list_with_rating_more_than_5(self):
         self.test_list.append('6')
         self.assertRaisesRegex(ValueError,
-                               'Rating must be between 1 and 5, if supplied',
+                               'Rating must be between 1 and 5, if present',
                                parse_command_line, self.test_list)
 
     def test_invalid_list_with_invalid_ISBN(self):

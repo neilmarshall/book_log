@@ -16,50 +16,53 @@ def parse_command_line(*args):
     """
     Parse command line arguments
 
-    >>> parse_command_line(['test title', 'test author', \
-                            '0-201-53082-1', 'test genre'])
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', 'test genre'])
     ('test title', 'test author', '0-201-53082-1', 'test genre', None, None)
 
-    >>> parse_command_line(['test title', 'test author', \
-                            '0-201-53082-1', 'test genre', '1'])
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', 'test genre', '1'])
     ('test title', 'test author', '0-201-53082-1', 'test genre', 1, None)
 
-    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', \
-                            'test genre', '-D 19-2-2008'])
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', 'test genre', '-D 19-2-2008'])
     ('test title', 'test author', '0-201-53082-1', 'test genre', None, datetime.datetime(2008, 2, 19, 0, 0))
 
-    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', \
-                            'test genre', '--Date', '19-2-2008'])
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', 'test genre', '--Date', '19-2-2008'])
     ('test title', 'test author', '0-201-53082-1', 'test genre', None, datetime.datetime(2008, 2, 19, 0, 0))
 
-    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', \
-                            'test genre', '3', '-D 19-2-2008'])
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', 'test genre', '3', '-D 19-2-2008'])
     ('test title', 'test author', '0-201-53082-1', 'test genre', 3, datetime.datetime(2008, 2, 19, 0, 0))
 
-    >>> parse_command_line(['test title', 'test author', \
-                            '0-201-53082-1', 'test genre', '3', '--Date', \
-                            '19-2-2008'])
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', 'test genre', '3', '--Date', '19-2-2008'])
     ('test title', 'test author', '0-201-53082-1', 'test genre', 3, datetime.datetime(2008, 2, 19, 0, 0))
     """
 
-    parser = argparse.ArgumentParser()
+    MIN_RATING, MAX_RATING = 1, 5
+
+    parser = argparse.ArgumentParser(description='''Command line parser
+         accepting arguments to instantiate program''')
 
     parser.add_argument('-V', '--version', action='version',
                         version=__version__)
-    parser.add_argument('Title')
-    parser.add_argument('Author')
-    parser.add_argument('ISBN')
-    parser.add_argument('Genre')
-    parser.add_argument('Rating', type=int, nargs='?')
+    parser.add_argument('Title', help='Book title, string')
+    parser.add_argument('Author', help='Book author, string')
+    parser.add_argument('ISBN', help='''Book ISBN, string, must be in
+                        recognised ISBN format''')
+    parser.add_argument('Genre', help='Book genre, string')
+    parser.add_argument('Rating', type=int, nargs='?', help='''Book rating; if
+                        provided must be between {MIN_RATING} and
+                        {MAX_RATING}, else defaults to None
+                        '''.format(**locals()))
     parser.add_argument('-D', '--Date',
+                        help='Date record added in d-m-yyyy format',
                         type=lambda x: datetime.datetime.strptime(x.strip(),
                                                                   '%d-%m-%Y'))
 
     args = parser.parse_args(*args)
 
     if args.Rating is not None:
-        if args.Rating not in [1, 2, 3, 4, 5]:
-            raise ValueError('Rating must be between 1 and 5, if supplied')
+        ARG_RATING_ERROR_MSG = ''.join(['Rating must be between ',
+           '{MIN_RATING} and {MAX_RATING}'.format(**locals()), ', if present'])
+        if args.Rating not in range(MIN_RATING, MAX_RATING + 1):
+            raise ValueError(ARG_RATING_ERROR_MSG)
 
     if not validate_ISBN(args.ISBN):
         raise ValueError('ISBN not in correct format')
