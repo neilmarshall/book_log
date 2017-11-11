@@ -4,6 +4,7 @@ and create a database record from those arguments.
 """
 
 import argparse
+import datetime
 import re
 
 from book_log.db_functions import create_record
@@ -25,7 +26,9 @@ def parse_command_line(*args):
     parser.add_argument('ISBN')
     parser.add_argument('Genre')
     parser.add_argument('Rating', type=int, nargs='?')
-    parser.add_argument('-D', '--Date', action='store_const', const=None)
+    parser.add_argument('-D', '--Date',
+                        type=lambda x: datetime.datetime.strptime(x.strip(),
+                                                                  '%d-%m-%Y'))
 
     args = parser.parse_args(*args)
 

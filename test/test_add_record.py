@@ -2,6 +2,7 @@
 Test module for add_record.py
 """
 
+import datetime
 import unittest
 
 from book_log.add_record import parse_command_line, validate_ISBN
@@ -13,16 +14,40 @@ class Test_parse_command_line(unittest.TestCase):
         self.test_list = ['test title', 'test author',
                           '0-201-53082-1', 'test genre']
 
-    def test_valid_list_with_no_rating_and_date(self):
+    def test_valid_list_with_no_rating_or_date(self):
         self.assertTupleEqual(parse_command_line(self.test_list),
                               ('test title', 'test author', '0-201-53082-1',
                                'test genre', None, None))
 
     def test_valid_list_with_rating_but_no_date(self):
-        self.test_list.append('4')
-        self.assertTupleEqual(parse_command_line(self.test_list),
+        self.test_list_with_rating = self.test_list + ['4']
+        self.assertTupleEqual(parse_command_line(self.test_list_with_rating),
                               ('test title', 'test author', '0-201-53082-1',
                                'test genre', 4, None))
+
+    def test_valid_list_with_date_but_no_rating_short_form(self):
+        self.test_list_with_date_short_form = self.test_list + \
+            ['-D 10-12-2005']
+        self.assertTupleEqual(
+                parse_command_line(self.test_list_with_date_short_form),
+                ('test title', 'test author', '0-201-53082-1',
+                 'test genre', None, datetime.datetime(2005, 12, 10)))
+
+    def test_valid_list_with_date_but_no_rating_long_form(self):
+        self.test_list_with_date_long_form = self.test_list + \
+            ['--Date'] + ['10-12-2005']
+        self.assertTupleEqual(
+                parse_command_line(self.test_list_with_date_long_form),
+                ('test title', 'test author', '0-201-53082-1',
+                 'test genre', None, datetime.datetime(2005, 12, 10)))
+
+    def test_valid_list_with_rating_and_date(self):
+        self.test_list_with_rating_and_date = self.test_list + ['4']
+        self.test_list_with_rating_and_date += ['-D 10-12-2005']
+        self.assertTupleEqual(
+                parse_command_line(self.test_list_with_rating_and_date),
+                ('test title', 'test author', '0-201-53082-1',
+                 'test genre', 4, datetime.datetime(2005, 12, 10)))
 
     def test_invalid_list_with_rating_less_than_1(self):
         self.test_list.append('0')
