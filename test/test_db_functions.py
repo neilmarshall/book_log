@@ -100,11 +100,6 @@ class Test_create_record(unittest.TestCase):
     def setUp(self):
         self.test_filepath = 'test.db'
         self.test_table_name = 'sample'
-#        self.test_list_1 = ['test title 1', 'test author 1', '0-201-53082-1',
-#                            'test genre 1', 'NULL',
-#                            datetime.datetime(2012, 11, 5)]
-#        self.test_list_2 = ['test title 2', 'test author 2',
-#                            '978-0-306-40615-7', 'test genre 2', 5]
         self.input = ['test title 1', 'test author 1', '0-201-53082-1',
                       'test genre 1', 'NULL', None, self.test_filepath,
                       self.test_table_name]
