@@ -15,6 +15,31 @@ __version__ = '1.1.1'
 def parse_command_line(*args):
     """
     Parse command line arguments
+
+    >>> parse_command_line(['test title', 'test author', \
+                            '0-201-53082-1', 'test genre'])
+    ('test title', 'test author', '0-201-53082-1', 'test genre', None, None)
+
+    >>> parse_command_line(['test title', 'test author', \
+                            '0-201-53082-1', 'test genre', '1'])
+    ('test title', 'test author', '0-201-53082-1', 'test genre', 1, None)
+
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', \
+                            'test genre', '-D 19-2-2008'])
+    ('test title', 'test author', '0-201-53082-1', 'test genre', None, datetime.datetime(2008, 2, 19, 0, 0))
+
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', \
+                            'test genre', '--Date', '19-2-2008'])
+    ('test title', 'test author', '0-201-53082-1', 'test genre', None, datetime.datetime(2008, 2, 19, 0, 0))
+
+    >>> parse_command_line(['test title', 'test author', '0-201-53082-1', \
+                            'test genre', '3', '-D 19-2-2008'])
+    ('test title', 'test author', '0-201-53082-1', 'test genre', 3, datetime.datetime(2008, 2, 19, 0, 0))
+
+    >>> parse_command_line(['test title', 'test author', \
+                            '0-201-53082-1', 'test genre', '3', '--Date', \
+                            '19-2-2008'])
+    ('test title', 'test author', '0-201-53082-1', 'test genre', 3, datetime.datetime(2008, 2, 19, 0, 0))
     """
 
     parser = argparse.ArgumentParser()
