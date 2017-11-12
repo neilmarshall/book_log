@@ -59,9 +59,9 @@ def parse_command_line(*args):
     args = parser.parse_args(*args)
 
     if args.Rating is not None:
-        ARG_RATING_ERROR_MSG = ('Rating must be between '
-                                '{MIN_RATING} and {MAX_RATING}, if present')
         if args.Rating not in range(MIN_RATING, MAX_RATING + 1):
+            ARG_RATING_ERROR_MSG = ('Rating must be between {MIN_RATING} and '
+                                    '{MAX_RATING}, if present')
             raise ValueError(ARG_RATING_ERROR_MSG.format(**locals()))
 
     if not validate_ISBN(args.ISBN):
@@ -76,11 +76,12 @@ def validate_ISBN(ISBN):
     Validate if a given ISBN in correct format
     """
 
+    # validate if ISBN in standard format
     pat = r'((978|979)(-))?(\d)-(\d{3})-(\d{5})-(\d)'
     is_valid_ISBN = re.match(pat, ISBN) is not None
 
+    # confirm checksum is valid
     ISBN_digits = ''.join([d for d in ISBN if d in '0123456789'])
-
     if len(ISBN_digits) == 10:
         weights = list(range(10, 0, -1))
         checksum = sum(map(lambda x: x[0] * x[1],

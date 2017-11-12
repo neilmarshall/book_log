@@ -13,7 +13,7 @@ def get_connection(db_name):
     try:
         return sqlite3.connect(db_name)
     except sqlite3.DatabaseError:
-        raise
+        raise sqlite3.DatabaseError('Could not connect to database')
 
 
 def create_table(conn, tbl_name, tbl_schema):
@@ -27,7 +27,7 @@ def create_table(conn, tbl_name, tbl_schema):
     try:
         conn.execute(SQL)
     except sqlite3.ProgrammingError:
-        raise
+        raise sqlite3.DatabaseError(SQL)
 
 
 def delete_table(conn, tbl_name):
@@ -38,7 +38,7 @@ def delete_table(conn, tbl_name):
     try:
         conn.execute(SQL)
     except sqlite3.ProgrammingError:
-        raise
+        raise sqlite3.DatabaseError(SQL)
 
 
 def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
@@ -56,7 +56,7 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
         conn.execute(SQL)
         conn.commit()
     except sqlite3.ProgrammingError:
-        raise
+        raise sqlite3.DatabaseError(SQL)
 
 
 def create_record(Title, Author, ISBN, Genre, Rating, Date,
