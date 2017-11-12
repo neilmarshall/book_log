@@ -46,7 +46,7 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
     """Execute SQL statement to add row into database object"""
 
     SQL = '''INSERT INTO {tbl_name} (Title, Author, ISBN, Genre,
-        Rating'''.format(tbl_name=tbl_name)
+        Rating'''.format(**locals())
     SQL += ', Date_Added)' if Date else ')'
     SQL += ''' VALUES ("{Title}", "{Author}", "{ISBN}",
         "{Genre}", {Rating}'''.format(**locals())
