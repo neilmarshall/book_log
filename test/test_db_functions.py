@@ -7,6 +7,7 @@ import os
 import unittest
 import sqlite3
 
+from book_log.parameters import TBL_SCHEMA
 from book_log.db_functions import get_connection, create_table, delete_table, \
                                   insert_row, create_record
 
@@ -27,7 +28,7 @@ class Test_create_table(unittest.TestCase):
 
     def setUp(self):
         self.conn = get_connection(':memory:')
-        create_table(self.conn, 'books')
+        create_table(self.conn, 'books', TBL_SCHEMA)
         self.table_info = self.conn.execute('PRAGMA table_info(books);')
 
     def tearDown(self):
@@ -43,7 +44,7 @@ class Test_delete_table(unittest.TestCase):
 
     def setUp(self):
         self.conn = get_connection(':memory:')
-        create_table(self.conn, 'books')
+        create_table(self.conn, 'books', TBL_SCHEMA)
         delete_table(self.conn, 'books')
         self.table_info = self.conn.execute('PRAGMA table_info(books);')
 
@@ -58,7 +59,7 @@ class Test_insert_row(unittest.TestCase):
 
     def setUp(self):
         self.conn = get_connection(':memory:')
-        create_table(self.conn, 'books')
+        create_table(self.conn, 'books', TBL_SCHEMA)
         self.input = ['test title', 'test author',
                       '0-201-53082-1', 'test genre', 'NULL']
         self.output = ['test title', 'test author',

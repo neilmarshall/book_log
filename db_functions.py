@@ -16,11 +16,10 @@ def get_connection(db_name):
         raise
 
 
-def create_table(conn, tbl_name):
+def create_table(conn, tbl_name, tbl_schema):
     """Execute SQL statement to add table to database object"""
 
-    tbl_schema = parameters.TBL_SCHEMA
-
+    # construct SQL 'CREATE TABLE' query from schema in 'parameters' module
     SQL = "CREATE TABLE IF NOT EXISTS {tbl_name} (".format(tbl_name=tbl_name)
     SQL += (', ').join(tbl_schema)
     SQL += ");"
@@ -62,7 +61,8 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
 
 def create_record(Title, Author, ISBN, Genre, Rating, Date,
                   db_filename=parameters.DB_FILENAME,
-                  tbl_name=parameters.TBL_NAME):
+                  tbl_name=parameters.TBL_NAME,
+                  tbl_schema=parameters.TBL_SCHEMA):
     """
     Control function for SQL execution
 
@@ -100,7 +100,7 @@ def create_record(Title, Author, ISBN, Genre, Rating, Date,
     # check if table already exists; create it if not
     SQL_TBL_CHECK = 'PRAGMA table_info({tbl_name});'.format(**locals())
     if conn.execute(SQL_TBL_CHECK).fetchall() == []:
-        create_table(conn, tbl_name)
+        create_table(conn, tbl_name, tbl_schema)
 
     insert_row_args = [conn, tbl_name, Title, Author, ISBN, Genre]
     if Rating:
