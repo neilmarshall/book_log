@@ -4,8 +4,7 @@ Module implements database create / read / write functionality
 
 import sqlite3
 
-DB_FILENAME = "book_log/data/book_log.db"
-TBL_NAME = "Books"
+import parameters
 
 
 def get_connection(db_name):
@@ -20,10 +19,10 @@ def get_connection(db_name):
 def create_table(conn, tbl_name):
     """Execute SQL statement to add table to database object"""
 
-    SQL = """CREATE TABLE IF NOT EXISTS {TBL_NAME} (Title TEXT
+    SQL = """CREATE TABLE IF NOT EXISTS {tbl_name} (Title TEXT
         NOT NULL, Author TEXT NOT NULL, ISBN TEXT PRIMARY KEY, Genre TEXT NOT
         NULL, Date_Added TEXT NOT NULL DEFAULT CURRENT_DATE, Rating
-        INTEGER);""".format(TBL_NAME=tbl_name)
+        INTEGER);""".format(tbl_name=tbl_name)
 
     try:
         conn.execute(SQL)
@@ -46,8 +45,8 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
                Rating='NULL', Date=None):
     """Execute SQL statement to add row into database object"""
 
-    SQL = '''INSERT INTO {TBL_NAME} (Title, Author, ISBN, Genre,
-        Rating'''.format(TBL_NAME=tbl_name)
+    SQL = '''INSERT INTO {tbl_name} (Title, Author, ISBN, Genre,
+        Rating'''.format(tbl_name=tbl_name)
     SQL += ', Date_Added)' if Date else ')'
     SQL += ''' VALUES ("{Title}", "{Author}", "{ISBN}",
         "{Genre}", {Rating}'''.format(**locals())
@@ -61,7 +60,8 @@ def insert_row(conn, tbl_name, Title, Author, ISBN, Genre,
 
 
 def create_record(Title, Author, ISBN, Genre, Rating, Date,
-                  db_filename=DB_FILENAME, tbl_name=TBL_NAME):
+                  db_filename=parameters.DB_FILENAME,
+                  tbl_name=parameters.TBL_NAME):
     """
     Control function for SQL execution
 
@@ -88,10 +88,10 @@ def create_record(Title, Author, ISBN, Genre, Rating, Date,
         'd-m-yyyy' format
 
     db_filename : str
-        Database file to write to; defaults to module variable DB_FILENAME
+        Database file to write to; defaults to variable DB_FILENAME
 
     tbl_name : str
-        Table to write to; defaults to module variable TBL_NAME
+        Table to write to; defaults to variable TBL_NAME
     """
 
     conn = get_connection(db_filename)
