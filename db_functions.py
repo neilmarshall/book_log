@@ -4,7 +4,7 @@ Module implements database create / read / write functionality
 
 import sqlite3
 
-import parameters
+import book_log.parameters as parameters
 
 
 def get_connection(db_name):
