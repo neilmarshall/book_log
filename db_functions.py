@@ -19,10 +19,11 @@ def get_connection(db_name):
 def create_table(conn, tbl_name):
     """Execute SQL statement to add table to database object"""
 
-    SQL = """CREATE TABLE IF NOT EXISTS {tbl_name} (Title TEXT
-        NOT NULL, Author TEXT NOT NULL, ISBN TEXT PRIMARY KEY, Genre TEXT NOT
-        NULL, Date_Added TEXT NOT NULL DEFAULT CURRENT_DATE, Rating
-        INTEGER);""".format(tbl_name=tbl_name)
+    tbl_schema = parameters.TBL_SCHEMA
+
+    SQL = "CREATE TABLE IF NOT EXISTS {tbl_name} (".format(tbl_name=tbl_name)
+    SQL += (', ').join(tbl_schema)
+    SQL += ");"
 
     try:
         conn.execute(SQL)
