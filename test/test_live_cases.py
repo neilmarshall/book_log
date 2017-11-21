@@ -44,5 +44,35 @@ class Test_entry_1(unittest.TestCase):
         self.assertTupleEqual(rows, tuple(self.output))
 
 
+class Test_entry_2(unittest.TestCase):
+
+    def setUp(self):
+        self.input = ["Test-Driven Python Development",
+                      "Siddharta Govindaraj",
+                      "978-1-78398-792-4",
+                      "Computing",
+                      "-D 17-11-2017"]
+        self.output = ["Test-Driven Python Development",
+                       "Siddharta Govindaraj",
+                       "978-1-78398-792-4",
+                       "Computing",
+                       str(datetime.date(2017, 11, 17)),
+                       None]
+        self.db_filename = 'test.db'
+        self.tbl_name = 'test_tbl'
+
+    def tearDown(self):
+        if os.path.exists(self.db_filename):
+            os.remove(self.db_filename)
+
+    def test_entry_2_as_specified(self):
+        args = parse_command_line(self.input)
+        create_record(*args, self.db_filename, self.tbl_name)
+        conn = sqlite3.connect(self.db_filename)
+        rows = conn.execute('SELECT * FROM {tbl_name};'
+                            .format(tbl_name=self.tbl_name)).fetchall()[0]
+        self.assertTupleEqual(rows, tuple(self.output))
+
+
 if __name__ == '__main__':
     unittest.main()

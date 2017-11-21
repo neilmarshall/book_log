@@ -102,12 +102,13 @@ def create_record(Title, Author, ISBN, Genre, Rating, Date,
     if conn.execute(SQL_TBL_CHECK).fetchall() == []:
         create_table(conn, tbl_name, tbl_schema)
 
-    insert_row_args = [conn, tbl_name, Title, Author, ISBN, Genre]
+    positional_args = [conn, tbl_name, Title, Author, ISBN, Genre]
+    optional_args = {}
     if Rating:
-        insert_row_args.append(Rating)
+        optional_args['Rating'] = Rating
     if Date:
-        insert_row_args.append(Date.strftime('%Y-%m-%d'))
+        optional_args['Date'] = Date.strftime('%Y-%m-%d')
 
-    insert_row(*insert_row_args)
+    insert_row(*positional_args, **optional_args)
 
     conn.close()

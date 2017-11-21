@@ -63,6 +63,21 @@ class Test_parse_command_line(unittest.TestCase):
         self.assertRaisesRegex(ValueError, 'ISBN not in correct format',
                                parse_command_line, self.test_list)
 
+    def test_valid_list_with_date_but_no_rating_short_form_ex2(self):
+        self.input = ["Test-Driven Python Development",
+                      "Siddharta Govindaraj",
+                      "978-1-78398-792-4",
+                      "Computing",
+                      "-D 17-11-2017"]
+        self.output = ["Test-Driven Python Development",
+                       "Siddharta Govindaraj",
+                       "978-1-78398-792-4",
+                       "Computing",
+                       None,
+                       datetime.datetime(2017, 11, 17)]
+        args = parse_command_line(self.input)
+        self.assertTupleEqual(args, tuple(self.output))
+
 
 class Test_validate_ISBN(unittest.TestCase):
 
@@ -70,18 +85,21 @@ class Test_validate_ISBN(unittest.TestCase):
         self.ISBN_10_digit = '0-201-53082-1'
         self.ISBN_13_digit = '978-0-306-40615-7'
 
-    def test_10_digit_valid_ISBN_returns_True(self):
+    def test_10_digit_valid_ISBN_returns_True_ex1(self):
         self.assertTrue(validate_ISBN(self.ISBN_10_digit))
 
-    def test_10_digit_invalid_ISBN_returns_False(self):
+    def test_10_digit_valid_ISBN_returns_True_ex2(self):
+        self.assertTrue(validate_ISBN("978-1-78398-792-4"))
+
+    def test_10_digit_invalid_ISBN_returns_False_ex1(self):
         for d in '023456789':
             with self.subTest(d=d):
                 self.assertFalse(validate_ISBN(self.ISBN_10_digit[:-1] + d))
 
-    def test_13_digit_valid_ISBN_returns_True(self):
+    def test_13_digit_valid_ISBN_returns_True_ex1(self):
         self.assertTrue(validate_ISBN(self.ISBN_13_digit))
 
-    def test_13_digit_invalid_ISBN_returns_False(self):
+    def test_13_digit_invalid_ISBN_returns_False_ex1(self):
         for d in '012345689':
             with self.subTest(d=d):
                 self.assertFalse(validate_ISBN(self.ISBN_13_digit[:-1] + d))

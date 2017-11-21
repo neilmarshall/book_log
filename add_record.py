@@ -77,7 +77,7 @@ def validate_ISBN(ISBN):
     """
 
     # validate if ISBN in standard format
-    pat = r'((978|979)(-))?(\d)-(\d{3})-(\d{5})-(\d)'
+    pat = r'((978|979)-)?[\d-]{10}'
     is_valid_ISBN = re.match(pat, ISBN) is not None
 
     # confirm checksum is valid
